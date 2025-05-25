@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id             String   @id @default(uuid())
+  nik            String?  @unique
+  kkNumber       String?
+  nama           String
+  gender         Gender
+  birthDate      DateTime @map("birth_date")
+  birthPlace     String   @map("birth_place")
+  phoneNumber    String   @map("phone_number")
+  email          String?  @unique
+  address        String?
+  village        String?
+  district       String?
+  regency        String?
+  province       String?
+  kodePos        String?  @map("kode_pos")
+  dormitory      String?
+  educationLevel String?  @map("education_level")
+  entryYear      Int      @map("entry_year")
+  status         Boolean
+  photo          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("students")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique(map: "User_email_key")
+  password  String
+  role      Role @default(admin)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum Role {
+  superadmin
+  admin
+}
