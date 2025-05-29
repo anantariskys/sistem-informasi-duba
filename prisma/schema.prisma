@@ -7,31 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Student {
-  id             String   @id @default(uuid())
-  nik            String?  @unique
-  kkNumber       String?
-  nama           String
-  gender         Gender
-  birthDate      DateTime @map("birth_date")
-  birthPlace     String   @map("birth_place")
-  phoneNumber    String   @map("phone_number")
-  email          String?  @unique
-  address        String?
-  village        String?
-  district       String?
-  regency        String?
-  province       String?
-  kodePos        String?  @map("kode_pos")
-  dormitory      String?
-  educationLevel String?  @map("education_level")
-  entryYear      Int      @map("entry_year")
-  status         Boolean
-  photo          String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+model GuruTugas {
+  id                Int                      @id @default(autoincrement())
+  nama              String
+  alamat            String
+  jurusan           String
+  nomorHp           String?
+  foto              String?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime?
+  penanggungJawabId Int?
+  status            Status?                  @default(tetap)
+  penanggungJawab   PenanggunJawabGuruTugas? @relation(fields: [penanggungJawabId], references: [id])
 
-  @@map("students")
+  @@map("guru_tugas")
+}
+
+model PenanggunJawabGuruTugas {
+  id        Int         @id @default(autoincrement())
+  nama      String
+  alamat    String
+  lembaga String
+  foto      String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?
+  guruTugas GuruTugas[]
+
+  @@map("penanggung_jawab_guru_tugas")
 }
 
 model User {
@@ -39,14 +41,14 @@ model User {
   name      String
   email     String    @unique(map: "User_email_key")
   password  String
-  role      Role @default(admin)
+  role      Role      @default(admin)
   createdAt DateTime  @default(now())
-  updatedAt DateTime
+  updatedAt DateTime?
 }
 
-enum Gender {
-  male
-  female
+enum Status {
+  calon
+  tetap
 }
 
 enum Role {
