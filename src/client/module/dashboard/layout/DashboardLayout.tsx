@@ -1,9 +1,9 @@
-"use client";
-import Sidebar from "@/client/components/Sidebar/index";
-import { ReactNode } from "react";
+'use client';
+import Sidebar from '@/client/components/Sidebar/index';
+import { ReactNode } from 'react';
 
-import useLogout from "../hooks/useLogout";
-import ConfirmModal from "@/client/components/ConfirmModal";
+import useLogout from '../hooks/useLogout';
+import ConfirmModal from '@/client/components/ConfirmModal';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { handleLogout, isOpen, toggleModal } = useLogout();
   return (
-    <div className="h-screen flex">
+    <div className="min-h-screen flex">
       <Sidebar onLogout={toggleModal} />
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* <Navbar />
