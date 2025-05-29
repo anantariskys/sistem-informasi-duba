@@ -1,54 +1,51 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
-import { prisma } from "@/client/lib/prisma";
-import { verifyPassword } from "../utils/password";
-import { User as PrismaUser } from "@prisma/client";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { NextAuthOptions } from 'next-auth';
+import { prisma } from '@/client/lib/prisma';
+import { verifyPassword } from '../utils/password';
+import { User as PrismaUser } from '@prisma/client';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface User {
-    role: PrismaUser["role"];
+    role: PrismaUser['role'];
   }
 }
-
-
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt",
-    maxAge: 60, // 1 minutes
+    strategy: 'jwt',
+    maxAge: 6000, // 1 minutes
   },
   jwt: {
-    maxAge: 60, // 1 minutes
+    maxAge: 6000, // 1 minutes
   },
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null;
         }
-  
+
         const user = await prisma.user.findUnique({
-            where: { email: credentials.email },
-            select: {
-                id: true,
-                email: true,
-                password: true,
-                name: true,
-                role: true,
-            },
+          where: { email: credentials.email },
+          select: {
+            id: true,
+            email: true,
+            password: true,
+            name: true,
+            role: true,
+          },
         });
-        
+
         if (!user || !user.password) {
-            return null;
+          return null;
         }
-        
 
         const isPasswordCorrect = await verifyPassword(
           credentials.password,
@@ -95,6 +92,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
 };
