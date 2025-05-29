@@ -23,7 +23,7 @@ async function main() {
       role: 'superadmin',
       createdAt: new Date(),
       updatedAt: new Date(),
-    }
+    },
   ];
 
   for (const user of users) {
