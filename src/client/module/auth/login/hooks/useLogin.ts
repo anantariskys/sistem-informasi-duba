@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import {  signIn } from "next-auth/react";
-import { LoginPayload, loginSchema } from "../schema/loginSchema";
-import { toast } from "react-toastify";
+import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { LoginPayload, loginSchema } from '../schema/loginSchema';
+import { toast } from 'react-toastify';
 
 const DEFAULT_VALUE = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 const useLogin = () => {
@@ -26,11 +26,11 @@ const useLogin = () => {
       try {
         setIsLoading(true);
 
-        const result = await signIn("credentials", {
+        const result = await signIn('credentials', {
           email: data.email,
           password: data.password,
           redirect: false,
-          callbackUrl: "/",
+          callbackUrl: '/',
         });
 
         if (result?.error) {
@@ -40,13 +40,13 @@ const useLogin = () => {
         }
 
         if (result?.ok) {
-          router.push("/");
+          router.push('/');
         }
 
         form.reset();
       } catch (error) {
         console.log(error);
-        toast.error("Terjadi kesalahan");
+        toast.error('Terjadi kesalahan');
       } finally {
         setIsLoading(false);
       }
