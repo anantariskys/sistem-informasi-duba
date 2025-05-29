@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Button from "../../../components/Button";
-import Input from "../../../components/Input";
-import useLogin from "./hooks/useLogin";
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
+import useLogin from './hooks/useLogin';
 
 export default function Login() {
   const { form, isLoading, onSubmit } = useLogin();
@@ -17,7 +17,7 @@ export default function Login() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-6">
         <div className="rounded-md shadow-sm space-y-2">
           <Input
-            {...form.register("email")}
+            {...form.register('email')}
             error={form.formState.errors.email?.message}
             required
             label="Email"
@@ -25,7 +25,7 @@ export default function Login() {
             disabled={isLoading}
           />
           <Input
-            {...form.register("password")}
+            {...form.register('password')}
             type="password"
             error={form.formState.errors.password?.message}
             required
