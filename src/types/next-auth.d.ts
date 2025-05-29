@@ -1,6 +1,6 @@
-import { Role } from "@prisma/client";
+import { Role } from '@prisma/client';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       id?: string;
