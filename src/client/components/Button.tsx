@@ -1,50 +1,50 @@
-import React, { ButtonHTMLAttributes } from "react";
-import clsx from "clsx";
+import React, { ButtonHTMLAttributes } from 'react';
+import clsx from 'clsx';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?:
-    | "primary"
-    | "secondary"
-    | "danger"
-    | "warning"
-    | "success"
-    | "grayOutline";
-  size?: "sm" | "md" | "lg";
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'warning'
+    | 'success'
+    | 'grayOutline';
+  size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
-  width?: "w-full" | "w-fit";
+  width?: 'w-full' | 'w-fit';
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
   className,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   isLoading = false,
   disabled,
-  width = "w-full",
+  width = 'w-full',
   ...props
 }) => {
   const baseStyles =
-    "relative flex justify-center items-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+    'relative flex justify-center items-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
 
   const variants = {
     primary:
-      "text-white bg-primary hover:bg-primary/90 focus:ring-indigo-500 border border-primary",
+      'text-white bg-primary hover:bg-primary/90 focus:ring-primary border border-primary',
     secondary:
-      "text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-gray-500 border border-gray-300",
+      'text-gray-700 bg-secondary hover:bg-secondary/90 focus:ring-secondary border border-secondary',
     danger:
-      "text-white bg-red-600 hover:bg-red-700 focus:ring-red-500 border border-transparent",
+      'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500 border border-transparent',
     warning:
-      "text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 border border-transparent",
+      'text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-500 border border-transparent',
     success:
-      "text-white bg-green-600 hover:bg-green-700 focus:ring-green-500 border border-transparent",
-    grayOutline: "text-gray-700   focus:ring-gray-500 border border-gray-300",
+      'text-white bg-green-600 hover:bg-green-700 focus:ring-green-500 border border-transparent',
+    grayOutline: 'text-gray-700   focus:ring-gray-500 border border-gray-300',
   };
 
   const sizes = {
-    sm: "px-3 py-2 text-sm",
-    md: "px-4 py-3 text-sm",
-    lg: "px-5 py-4 text-base",
+    sm: 'px-3 py-2 text-sm',
+    md: 'px-4 py-3 text-sm',
+    lg: 'px-5 py-4 text-base',
   };
 
   return (
@@ -54,8 +54,8 @@ const Button: React.FC<ButtonProps> = ({
         baseStyles,
         variants[variant],
         sizes[size],
-        disabled && "opacity-50 cursor-not-allowed",
-        className,
+        disabled && 'opacity-50 cursor-not-allowed',
+        className
       )}
       disabled={disabled || isLoading}
       {...props}

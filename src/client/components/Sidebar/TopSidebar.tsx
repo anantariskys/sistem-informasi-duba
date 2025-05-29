@@ -1,5 +1,6 @@
-import React from "react";
-import { FiSidebar } from "react-icons/fi";
+import Image from 'next/image';
+import React from 'react';
+import { FiSidebar } from 'react-icons/fi';
 
 interface TopSidebarProps {
   setIsColapsed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,15 +13,18 @@ const TopSidebar: React.FC<TopSidebarProps> = ({
   return (
     <div className="flex items-center justify-between px-6 py-8 border-b border-gray-200">
       <div className="overflow-hidden whitespace-nowrap">
-        <h1
-          className={`text-2xl font-semibold text-gray-900 transition-opacity duration-300 ${isCollapsed ? "opacity-0" : "opacity-100"}`}
-        >
-          Untitled UI
-        </h1>
+        <Image
+          src={'/images/logo.png'}
+          alt='logo'
+          width={200}
+          height={50}
+          priority
+          className={`${isCollapsed ? 'w-0' : ''} transition-all duration-300 ease-in-out`}
+        />
       </div>
       <button
         onClick={() => setIsColapsed(!isCollapsed)}
-        className={`${isCollapsed ? "mx-auto" : ""}`}
+        className={`${isCollapsed ? 'mx-auto' : ''}`}
       >
         <FiSidebar className="size-6" />
       </button>

@@ -1,6 +1,6 @@
-import { Role } from "@prisma/client";
-import Link from "next/link";
-import { FiLogOut, FiUser } from "react-icons/fi";
+import { Role } from '@prisma/client';
+import Link from 'next/link';
+import { FiLogOut, FiUser } from 'react-icons/fi';
 
 export default function BottomSidebar({
   isCollapsed,
@@ -17,14 +17,14 @@ export default function BottomSidebar({
   };
 }) {
   const sharedButtonClasses = `w-full flex items-center px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-all duration-300 ${
-    isCollapsed ? "justify-center" : ""
+    isCollapsed ? 'justify-center' : ''
   }`;
 
   const iconClasses = (isCollapsed: boolean) =>
-    `size-5 ${!isCollapsed ? "mr-3" : ""}`;
+    `size-5 ${!isCollapsed ? 'mr-3' : ''}`;
 
   const textClasses = `transition-all duration-300 ${
-    isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+    isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
   } overflow-hidden whitespace-nowrap`;
 
   return (
