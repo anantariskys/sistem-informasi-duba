@@ -14,7 +14,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen flex">
       <Sidebar onLogout={toggleModal} />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div
+        className="flex-1 flex flex-col overflow-hidden"
+        style={{
+          backgroundColor: '#c62d83',
+          backgroundImage:
+            'url("https://www.transparenttextures.com/patterns/escheresque-dark.png")',
+        }}
+      >
         {/* <Navbar />
           <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
           </main> */}

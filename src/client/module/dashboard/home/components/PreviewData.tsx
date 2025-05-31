@@ -28,7 +28,7 @@ export default function PreviewData({
         </thead>
         <tbody>
           {data.map((pj) => (
-            <tr key={`${pj.nama_pjgt}-${pj.lembaga}`} className="even:bg-gray-50 text-sm hover:bg-gray-100 transition-colors">
+            <tr key={`${pj.nama_pjgt}-${pj.lembaga}`} className="even:bg-gray-50 odd:bg-white text-sm hover:bg-gray-100 transition-colors">
               <td className="px-3 py-2 border-b align-top">{pj.nama_pjgt || '-'}</td>
               <td className="px-3 py-2 border-b align-top">{pj.lembaga}</td>
               <td className="px-3 py-2 border-b align-top">{pj.alamat}</td>

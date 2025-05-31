@@ -14,6 +14,17 @@ const guruTugas = createQueryKeys('guruTugas', {
   create: () => ['create-course'],
   delete: (id: string | undefined) => [id],
 });
+const admin = createQueryKeys('admin', {
+  list: (params: GetStudentQueryParams | undefined) => [
+    {
+      limit: params?.limit ?? 10,
+      page: params?.page ?? 1,
+    },
+  ],
+  create: () => ['create-course'],
+  delete: (id: string | undefined) => [id],
+  edit: (id: string | undefined) => [id],
+});
 
 const penanggungJawab = createQueryKeys('penanggungJawab', {
   list: (params: GetStudentQueryParams | undefined) => [
@@ -23,8 +34,14 @@ const penanggungJawab = createQueryKeys('penanggungJawab', {
     },
   ],
   create: () => ['create-course'],
-  delete: (id: string ) => [id],
-  option : () => ['option'],
+  delete: (id: string) => [id],
+  option: () => ['option'],
+});
+const dashboard = createQueryKeys('dashboard', {
+  statistic: () => ['statistic'],
+  export: () => ['export'],
 });
 
-export const queryKeys = mergeQueryKeys(guruTugas, penanggungJawab);
+
+
+export const queryKeys = mergeQueryKeys(guruTugas, penanggungJawab, admin,dashboard);

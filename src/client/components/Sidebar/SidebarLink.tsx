@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface SidebarLinkProps {
   adminNavigation: {
@@ -16,6 +17,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
   isCollapsed,
 }) => {
   const pathname = usePathname();
+
 
   return (
     <nav className="mt-5 px-3 space-y-1 text-gray-600">

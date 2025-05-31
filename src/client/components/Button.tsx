@@ -8,7 +8,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | 'danger'
     | 'warning'
     | 'success'
-    | 'grayOutline';
+    | 'grayOutline'
+    | 'primaryOutline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   width?: 'w-full' | 'w-fit';
@@ -29,7 +30,9 @@ const Button: React.FC<ButtonProps> = ({
 
   const variants = {
     primary:
-      'text-white bg-primary hover:bg-primary/90 focus:ring-primary border border-primary',
+      'text-white bg-darkPurple hover:bg-darkPurple focus:ring-darkPurple border border-primary',
+    primaryOutline:
+      'text-darkPurple bg-white focus:ring-darkPurple border border-darkPurple',
     secondary:
       'text-gray-700 bg-secondary hover:bg-secondary/90 focus:ring-secondary border border-secondary',
     danger:

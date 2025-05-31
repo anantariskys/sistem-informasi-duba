@@ -36,13 +36,13 @@ export default function BottomSidebar({
         </button>
 
         <div className="pt-2 border-t w-full">
-          <Link href="/dashboard/profile" className={sharedButtonClasses}>
+          <div className={sharedButtonClasses}>
             <FiUser className={iconClasses(isCollapsed)} />
             <span className={textClasses}>
               <p className="font-semibold">{user?.name}</p>
               <p>{user?.email}</p>
             </span>
-          </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button';
 
 interface FormModalProps {
   show: boolean;
@@ -44,19 +45,11 @@ const FormModal: React.FC<FormModalProps> = ({
         <div className="space-y-4">{children}</div>
 
         <div className="mt-6 flex justify-end space-x-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
-            disabled={isSubmitting}
-          >
+          <Button variant='primaryOutline' type="button" onClick={onClose} disabled={isSubmitting}>
             Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white text-sm disabled:opacity-60"
-            disabled={isSubmitting}
-          >
+          </Button>
+
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -65,7 +58,7 @@ const FormModal: React.FC<FormModalProps> = ({
             ) : (
               'Submit'
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

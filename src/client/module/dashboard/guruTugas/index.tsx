@@ -9,8 +9,11 @@ import useDeleteGT from './hooks/useDeleteGT';
 import useGT from './hooks/useGT';
 import ConfirmModal from '@/client/components/ConfirmModal';
 import CreateModalGT from './components/CreateModalGT';
+import { useSession } from 'next-auth/react';
 
 export default function StudentPage() {
+  const { data: session } = useSession();
+  const isSuperAdmin = session?.user?.role === 'superadmin';
   const {
     data,
     isLoading,
@@ -53,45 +56,50 @@ export default function StudentPage() {
       header: 'Penanggung Jawab',
       render: (row) => row.penanggungJawab?.nama || '-',
     },
-    {
-      key: 'action',
-      header: 'Action',
-      render: (row) => (
-        <div className="flex gap-2">
-          <Button size="sm" variant="warning">
-            Edit
-          </Button>
-          <Button
-            onClick={() => {
-              setIsModalDeleteOpen(true);
-              setSelectedGTId(row.id);
-            }}
-            size="sm"
-            variant="danger"
-          >
-            Hapus
-          </Button>
-          <Button size="sm">Detail</Button>
-        </div>
-      ),
-    },
+
+    ...(isSuperAdmin
+      ? [
+          {
+            key: 'action',
+            header: 'Action',
+            render: (row: GuruTugasDT) => (
+              <div className="flex gap-2">
+                <Button size="sm" variant="warning">
+                  Edit
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsModalDeleteOpen(true);
+                    setSelectedGTId(row.id);
+                  }}
+                  size="sm"
+                  variant="danger"
+                >
+                  Hapus
+                </Button>
+                <Button size="sm">Detail</Button>
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen px-4 py-8">
-      <h1 className="text-2xl font-semibold mb-6">Daftar Guru Tugas</h1>
-      <div className="flex justify-end mb-4">
-        <Button width="w-fit" onClick={() => setIsModalCreateOpen(true)}>
-          Tambah Guru Tugas 
-        </Button>
+    <div className="min-h-screen px-4 py-4 ">
+      <div className="flex items-center mb-4 justify-between">
+        <h1 className="text-2xl text-white font-semibold">Daftar Guru Tugas</h1>
+        {isSuperAdmin && (
+          <div className="">
+            <Button
+              width="w-fit"
+              variant="primaryOutline"
+              onClick={() => setIsModalCreateOpen(true)}
+            >
+              Tambah Guru Tugas
+            </Button>
+          </div>
+        )}
       </div>
       <DataTable
         data={data || []}
@@ -99,6 +107,7 @@ export default function StudentPage() {
         pagination={pagination}
         onPageChange={handleOnChangePage}
         onLimitChange={handleOnChangeLimit}
+        loading={isLoading}
       />
       <ConfirmModal
         isOpen={isModalDeleteOpen}
@@ -111,8 +120,8 @@ export default function StudentPage() {
         isLoading={isPendingDeleteGT}
       />
       <CreateModalGT
-      isShow={isModalCreateOpen}
-      onClose={() => setIsModalCreateOpen(false)}
+        isShow={isModalCreateOpen}
+        onClose={() => setIsModalCreateOpen(false)}
       />
     </div>
   );

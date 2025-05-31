@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Input from './Input';
 
 // Define column type
 export type Column<T> = {
@@ -11,7 +12,6 @@ export type Column<T> = {
   hidden?: boolean;
 };
 
-// Props type
 interface DataTableProps<T> {
   title?: string;
   data: T[];
@@ -25,6 +25,8 @@ interface DataTableProps<T> {
   };
   onPageChange?: (page: number) => void;
   onLimitChange?: (limit: number) => void;
+  onSearchChange?: (value: string) => void;
+  loading?: boolean;
 }
 
 export function DataTable<T>({
@@ -35,6 +37,8 @@ export function DataTable<T>({
   pagination,
   onPageChange,
   onLimitChange,
+  onSearchChange,
+  loading = false,
 }: DataTableProps<T>) {
   const visibleColumns = columns.filter((col) => !col.hidden);
   const [sortKey, setSortKey] = useState<string | null>(null);
@@ -50,15 +54,16 @@ export function DataTable<T>({
   }
 
   return (
-    <div
-      className={`overflow-x-auto rounded-xl shadow-md bg-white ${className}`}
-    >
+    <div className={`overflow-x-auto rounded-xl shadow-md bg-white ${className}`}>
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 p-4 border-b border-gray-200 bg-gray-50">
-        <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+        <Input
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => onSearchChange?.(e.target.value)}
+        />
+
         <div>
-          <label htmlFor="limit" className="mr-2 text-sm text-gray-600">
-            Show:
-          </label>
+          <label htmlFor="limit" className="mr-2 text-sm text-gray-600">Show:</label>
           <select
             id="limit"
             value={pagination?.itemsPerPage}
@@ -93,38 +98,43 @@ export function DataTable<T>({
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {data.map((row, rowIndex) => {
-            const startNumber =
-              ((pagination?.currentPage || 1) - 1) *
-              (pagination?.itemsPerPage || 10);
-            return (
-              <tr key={rowIndex} className="hover:bg-blue-50 transition-colors">
-                <td className="px-4 py-3 text-gray-700">
-                  {startNumber + rowIndex + 1}
-                </td>
-                {visibleColumns.map((col) => (
-                  <td
-                    key={col.key}
-                    className={`px-4 py-3 text-gray-600 ${getAlignment(col.align)}`}
-                  >
-                    {col.render
-                      ? col.render(row)
-                      : String(row[col.accessor as keyof T] ?? '-')}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
+          {loading ? (
+            <tr>
+              <td colSpan={visibleColumns.length + 1} className="py-6 text-center">
+                <span className="inline-block w-6 h-6 border-2 border-darkPurple border-t-transparent rounded-full animate-spin"></span>
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={visibleColumns.length + 1} className="py-6 text-center text-gray-500">
+                Tidak ada data
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => {
+              const startNumber = ((pagination?.currentPage || 1) - 1) * (pagination?.itemsPerPage || 10);
+              return (
+                <tr key={rowIndex} className="hover:bg-blue-50 transition-colors">
+                  <td className="px-4 py-3 text-gray-700">{startNumber + rowIndex + 1}</td>
+                  {visibleColumns.map((col) => (
+                    <td
+                      key={col.key}
+                      className={`px-4 py-3 text-gray-600 ${getAlignment(col.align)}`}
+                    >
+                      {col.render ? col.render(row) : String(row[col.accessor as keyof T] ?? '-')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
 
-      {/* Pagination Controls */}
       <div className="flex flex-col md:flex-row justify-between items-center p-4 text-sm text-gray-600 bg-gray-50 border-t border-gray-200 gap-4">
         <span>
           Showing{' '}
-          {((pagination?.currentPage || 1) - 1) *
-            (pagination?.itemsPerPage || 10) +
-            1}{' '}
+          {((pagination?.currentPage || 1) - 1) * (pagination?.itemsPerPage || 10) + 1}{' '}
           to{' '}
           {Math.min(
             (pagination?.currentPage || 1) * (pagination?.itemsPerPage || 10),
@@ -143,9 +153,7 @@ export function DataTable<T>({
           </button>
           <button
             onClick={() => onPageChange?.((pagination?.currentPage || 1) + 1)}
-            disabled={
-              (pagination?.currentPage || 0) >= (pagination?.totalPages || 0)
-            }
+            disabled={(pagination?.currentPage || 0) >= (pagination?.totalPages || 0)}
             className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next
@@ -155,6 +163,7 @@ export function DataTable<T>({
     </div>
   );
 }
+
 
 function getAlignment(align?: 'left' | 'center' | 'right') {
   switch (align) {
