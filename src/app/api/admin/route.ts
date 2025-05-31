@@ -1,5 +1,6 @@
 import { prisma } from '@/client/lib/prisma';
-import { GTPayload } from '@/client/module/dashboard/guruTugas/schema/GTSchema';
+import { AdminPayload } from '@/client/module/dashboard/admin/schema/adminSchema';
+import { hashPassword } from '@/server/utils/password';
 import { HttpStatusCode } from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,49 +13,43 @@ export async function GET(req: NextRequest) {
 
   try {
     // Get both count and data in a single query for better performance
-    const [guruTugas, totalGuruTugas] = await prisma.$transaction([
-      prisma.guruTugas.findMany({
+    const [penanggungJawab, totalPenanggungJawab] = await prisma.$transaction([
+      prisma.user.findMany({
         skip: skip,
         take: limit,
         orderBy: {
-          id: 'asc',
+          name: 'asc',
+        },
+        where: {
+          role: 'admin',
         },
         select: {
           id: true,
-          alamat: true,
-          jurusan: true,
-          nama: true,
-          nomorHp: true,
-          status: true,
+          name: true,
+          email: true,
+          role: true,
+          password: true,
           createdAt: true,
-          penanggungJawab: {
-            select: {
-              id: true,
-              nama: true,
-            },
-          },
-        },
-        where: {
-          status: 'tetap',
+          updatedAt: true,
         },
       }),
-      prisma.guruTugas.count({
+      prisma.user.count({
         where: {
-          status: 'tetap',
+          role: 'admin',
         },
       }),
     ]);
 
-    const totalPages = Math.ceil(totalGuruTugas / limit);
+    const totalPages = Math.ceil(totalPenanggungJawab / limit);
 
     return NextResponse.json(
       {
-        message: 'Successfully retrieved guruTugas',
-        data: guruTugas,
+        message: 'Successfully retrieved Penanggung Jawab',
+        data: penanggungJawab,
         metadata: {
           currentPage: page,
           totalPages: totalPages,
-          totalItems: totalGuruTugas,
+          totalItems: totalPenanggungJawab,
           itemsPerPage: limit,
         },
         success: true,
@@ -66,7 +61,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       {
-        message: 'Failed to retrieve guruTugas',
+        message: 'Failed to retrieve Penanggung Jawab',
         error: error,
       },
       { status: HttpStatusCode.InternalServerError }
@@ -75,53 +70,43 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { nama, alamat, jurusan, nomorHp, penanggungJawabId } =
-    (await req.json()) as GTPayload;
+  const { name, email, password } = (await req.json()) as AdminPayload;
 
-  if (!nama || !alamat || !jurusan) {
+  if (!name || !email || !password) {
     return NextResponse.json(
       {
-        message: 'Nama, alamat, and jurusan are required',
+        message: 'Name, email, and password are required',
         success: false,
       },
       { status: HttpStatusCode.BadRequest }
     );
   }
-
   try {
-    const guruTugas = await prisma.guruTugas.create({
+    const hashedPassword = await hashPassword(password);
+    const penanggungJawab = await prisma.user.create({
       data: {
-        nama,
-        alamat,
-        jurusan,
-        nomorHp,
-        penanggungJawabId,
-      },
-
-      include: {
-        penanggungJawab: {
-          select: {
-            id: true,
-            nama: true,
-          },
-        },
+        name: name,
+        email: email,
+        password: hashedPassword,
+        role: 'admin',
       },
     });
 
     return NextResponse.json(
       {
-        message: 'Successfully created Guru Tugas',
-        data: guruTugas,
+        message: 'Successfully retrieved Penanggung Jawab',
+        data: penanggungJawab,
         success: true,
       },
       {
-        status: HttpStatusCode.Created,
+        status: HttpStatusCode.Ok,
       }
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
-        message: 'Failed to create Guru Tugas',
+        message: 'Failed to retrieve Penanggung Jawab',
         error: error,
       },
       { status: HttpStatusCode.InternalServerError }
