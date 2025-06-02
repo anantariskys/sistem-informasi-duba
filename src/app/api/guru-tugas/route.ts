@@ -1,5 +1,7 @@
 import { prisma } from '@/client/lib/prisma';
-import { GTPayload } from '@/client/module/dashboard/guruTugas/schema/GTSchema';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { HttpStatusCode } from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,6 +10,7 @@ export async function GET(req: NextRequest) {
 
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
+  const keyword = searchParams.get('keyword') || '';
   const skip = (page - 1) * limit;
 
   try {
@@ -27,6 +30,7 @@ export async function GET(req: NextRequest) {
           nomorHp: true,
           status: true,
           createdAt: true,
+          foto: true,
           penanggungJawab: {
             select: {
               id: true,
@@ -36,11 +40,17 @@ export async function GET(req: NextRequest) {
         },
         where: {
           status: 'tetap',
+          nama: {
+            contains: keyword,
+          }
         },
       }),
       prisma.guruTugas.count({
         where: {
           status: 'tetap',
+          nama: {
+            contains: keyword,
+          }
         },
       }),
     ]);
@@ -75,17 +85,48 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { nama, alamat, jurusan, nomorHp, penanggungJawabId } =
-    (await req.json()) as GTPayload;
+  const formData = await req.formData();
+
+  const nama = formData.get('nama') as string;
+  const alamat = formData.get('alamat') as string;
+  const jurusan = formData.get('jurusan') as string;
+  const nomorHp = formData.get('nomorHp') as string | null;
+  const penanggungJawabId = formData.get('penanggungJawabId');
+  const foto = formData.get('foto');
+
 
   if (!nama || !alamat || !jurusan) {
     return NextResponse.json(
       {
-        message: 'Nama, alamat, and jurusan are required',
+        message: 'Nama, alamat, dan jurusan harus diisi',
         success: false,
       },
-      { status: HttpStatusCode.BadRequest }
+      { status: 400 }
     );
+  }
+
+  let fileUrl: string | undefined = undefined;
+
+  if (foto && foto instanceof File) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(foto.type)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Format file tidak didukung',
+        },
+        { status: 400 }
+      );
+    }
+
+    const bytes = await foto.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const fileName = `${uuidv4()}.${foto.name.split('.').pop()}`;
+    const folder = join(process.cwd(), 'public', 'uploads');
+    await mkdir(folder, { recursive: true });
+    const filePath = join(folder, fileName);
+    await writeFile(filePath, buffer);
+    fileUrl = `/uploads/${fileName}`;
   }
 
   try {
@@ -94,10 +135,10 @@ export async function POST(req: NextRequest) {
         nama,
         alamat,
         jurusan,
-        nomorHp,
-        penanggungJawabId,
+        nomorHp: nomorHp ?? undefined,
+        penanggungJawabId: penanggungJawabId ? Number(penanggungJawabId) : undefined,
+        foto: fileUrl,
       },
-
       include: {
         penanggungJawab: {
           select: {
@@ -115,16 +156,16 @@ export async function POST(req: NextRequest) {
         success: true,
       },
       {
-        status: HttpStatusCode.Created,
+        status: 201,
       }
     );
   } catch (error) {
     return NextResponse.json(
       {
         message: 'Failed to create Guru Tugas',
-        error: error,
+        error,
       },
-      { status: HttpStatusCode.InternalServerError }
+      { status: 500 }
     );
   }
 }
