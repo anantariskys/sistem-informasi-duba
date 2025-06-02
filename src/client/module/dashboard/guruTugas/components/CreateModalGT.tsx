@@ -4,6 +4,7 @@ import Input from '@/client/components/Input';
 import useCreateGT from '../hooks/useCreateGT';
 import Dropdown from '@/client/components/Dropdown';
 import SearchableDropdown from '@/client/components/SearchableDropdown';
+import FileInput from '@/client/components/FileInput';
 
 interface CreateModalGTProps {
   isShow: boolean;
@@ -18,6 +19,8 @@ export default function CreateModalGT({ isShow, onClose }: CreateModalGTProps) {
     setValue,
     formState: { errors },
   } = form;
+
+  const fotoVal = form.watch('foto');
 
   return (
     <FormModal
@@ -67,6 +70,10 @@ export default function CreateModalGT({ isShow, onClose }: CreateModalGTProps) {
           placeholder="Masukkan Nomor HP"
           error={errors.nomorHp?.message}
           {...register('nomorHp')}
+        />
+        <FileInput
+          onFileChange={(val) => setValue('foto', val || undefined)}
+          initialFileUrl={typeof fotoVal === 'string' ? fotoVal : undefined}
         />
       </div>
     </FormModal>

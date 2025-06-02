@@ -13,15 +13,32 @@ type GTResponse = {
   message: string;
 };
 const postGT = async (data: GTPayload): Promise<GTResponse> => {
+  const formData = new FormData();
+
+  formData.append('nama', data.nama);
+  formData.append('alamat', data.alamat);
+  formData.append('jurusan', data.jurusan);
+
+  if (data.nomorHp) formData.append('nomorHp', data.nomorHp);
+  if (data.penanggungJawabId !== undefined)
+    formData.append('penanggungJawabId', String(data.penanggungJawabId));
+  if (data.foto instanceof File) formData.append('foto', data.foto);
+
   const response = await apiClient.request<'/guru-tugas', 'post'>(
     'post',
     '/guru-tugas',
     undefined,
-    data
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
   );
 
   return response;
 };
+
 
 const useMutationCreateGT = (
   options?: Omit<

@@ -10,6 +10,7 @@ import useGT from './hooks/useGT';
 import ConfirmModal from '@/client/components/ConfirmModal';
 import CreateModalGT from './components/CreateModalGT';
 import { useSession } from 'next-auth/react';
+import DetailModalGT from './components/DetailModalGT';
 
 export default function StudentPage() {
   const { data: session } = useSession();
@@ -24,6 +25,9 @@ export default function StudentPage() {
     isModalDeleteOpen,
     setIsModalCreateOpen,
     setIsModalDeleteOpen,
+    handleOnChangeSearch,
+    isModalDetailOpen,
+    setIsModalDetailOpen,
   } = useGT();
 
   const { handleSubmit, isPendingDeleteGT, setSelectedGTId } = useDeleteGT(() =>
@@ -77,7 +81,17 @@ export default function StudentPage() {
                 >
                   Hapus
                 </Button>
-                <Button size="sm">Detail</Button>
+                <Button
+                  onClick={() => {
+                    setIsModalDetailOpen({
+                      isOpen: true,
+                      data: row,
+                    });
+                  }}
+                  size="sm"
+                >
+                  Detail
+                </Button>
               </div>
             ),
           },
@@ -108,6 +122,7 @@ export default function StudentPage() {
         onPageChange={handleOnChangePage}
         onLimitChange={handleOnChangeLimit}
         loading={isLoading}
+        onSearchChange={handleOnChangeSearch}
       />
       <ConfirmModal
         isOpen={isModalDeleteOpen}
@@ -122,6 +137,11 @@ export default function StudentPage() {
       <CreateModalGT
         isShow={isModalCreateOpen}
         onClose={() => setIsModalCreateOpen(false)}
+      />
+      <DetailModalGT
+        isShow={isModalDetailOpen.isOpen}
+        onClose={() => setIsModalDetailOpen({ isOpen: false, data: null })}
+        data={isModalDetailOpen.data}
       />
     </div>
   );

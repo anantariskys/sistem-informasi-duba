@@ -8,6 +8,7 @@ import { GuruTugas } from '@prisma/client';
 export type GetStudentQueryParams = {
   limit: number;
   page: number;
+  keyword?: string;
 };
 
 const getStudentQuery = async (params: GetStudentQueryParams) => {
@@ -17,6 +18,7 @@ const getStudentQuery = async (params: GetStudentQueryParams) => {
     {
       limit: params.limit,
       page: params.page,
+      keyword: params.keyword,
     }
   );
   return res;
@@ -49,6 +51,7 @@ const useQueryGetStudent = ({
     getStudentQuery({
       limit: params?.limit ?? 10,
       page: params?.page ?? 1,
+      keyword: params?.keyword?? '',
     });
 
   return useQueryProvider<StudentListResponse>({

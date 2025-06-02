@@ -6,6 +6,7 @@ export const GTSchema = z.object({
   alamat: z.string().min(1, 'Alamat harus diisi'),
   jurusan: z.string().min(1, 'Jurusan harus diisi'),
   nomorHp: z.string().min(1, 'Nomor HP harus diisi').optional(),
+  foto: z.union([z.string(), z.instanceof(File)]).optional(),
   penanggungJawabId: z.number().optional(),
 });
 
