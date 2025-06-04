@@ -3,7 +3,7 @@ import { UseQueryOptions } from '@tanstack/react-query';
 import { queryKeys } from '@/client/const/queryKeys';
 import { apiClient } from '@/client/lib/axios';
 import useQueryProvider from '@/client/hooks/useQueryProvider';
-import { GuruTugas, PenanggunJawabGuruTugas } from '@prisma/client';
+import { PenanggunJawabGuruTugas } from '@prisma/client';
 import { GuruTugasDT } from '../../guruTugas/types/type';
 
 const getStatisticQuery = async () => {

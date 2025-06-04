@@ -48,7 +48,7 @@ const useEditPenanggungJawab = (
         }
       );
     },
-    [form, mutate, onClose]
+    [form, mutate, onClose,initialData.id]
   );
 
   return {

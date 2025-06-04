@@ -13,6 +13,7 @@ const guruTugas = createQueryKeys('guruTugas', {
   ],
   create: () => ['create-course'],
   delete: (id: string | undefined) => [id],
+  promote: (id: string | undefined) => [id],
 });
 const admin = createQueryKeys('admin', {
   list: (params: GetStudentQueryParams | undefined) => [

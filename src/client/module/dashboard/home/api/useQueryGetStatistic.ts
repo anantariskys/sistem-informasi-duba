@@ -3,7 +3,7 @@ import { UseQueryOptions } from '@tanstack/react-query';
 import { queryKeys } from '@/client/const/queryKeys';
 import { apiClient } from '@/client/lib/axios';
 import useQueryProvider from '@/client/hooks/useQueryProvider';
-import { PenanggunJawabGuruTugas } from '@prisma/client';
+
 
 const getStatisticQuery = async () => {
   const res = await apiClient.request<'/statistic', 'get'>('get', '/statistic');

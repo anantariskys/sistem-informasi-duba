@@ -18,7 +18,7 @@ export default function ImportExcelPage() {
   const { excelData, fileName, loading, status, handleFileUpload, handleSave } =
     useImportExcel();
 
-  const { handleExport, isLoading, error } = useExportExcel();
+  const { handleExport, isLoading } = useExportExcel();
   const { data: session } = useSession();
   const isSuperAdmin = session?.user?.role === 'superadmin';
 

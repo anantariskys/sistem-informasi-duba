@@ -1,5 +1,4 @@
 import { Role } from '@prisma/client';
-import Link from 'next/link';
 import { FiLogOut, FiUser } from 'react-icons/fi';
 
 export default function BottomSidebar({

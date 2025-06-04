@@ -6,12 +6,11 @@ import { NextResponse } from 'next/server';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const id = (await params).id;
 
-    // Delete the record from database
     const deletedPenanggungJawab = await prisma.user.delete({
       where: {
         id: Number(id),
@@ -30,7 +29,7 @@ export async function DELETE(
     return NextResponse.json(
       {
         message: 'Failed to delete data',
-        error: error,
+        error,
       },
       { status: HttpStatusCode.InternalServerError }
     );
@@ -39,10 +38,10 @@ export async function DELETE(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const id = (await params).id;
     const body = (await request.json()) as EditAdminPayloadWithId;
 
     const user = await prisma.user.findUnique({
@@ -72,7 +71,6 @@ export async function PATCH(
     }
 
     const isPasswordCorrect = await verifyPassword(body.password, user.password);
-    console.log(isPasswordCorrect);
     if (!isPasswordCorrect) {
       return NextResponse.json(
         {
@@ -82,13 +80,12 @@ export async function PATCH(
         { status: HttpStatusCode.BadRequest }
       );
     }
-    // Hash the new password if provided
+
     let hashedPassword = user.password;
     if (body.confirmPassword) {
       hashedPassword = await hashPassword(body.confirmPassword);
     }
 
-    // Update the record in database
     const updatedPenanggungJawab = await prisma.user.update({
       where: {
         id: Number(id),
@@ -100,6 +97,7 @@ export async function PATCH(
         updatedAt: new Date(),
       },
     });
+
     return NextResponse.json(
       {
         message: 'Data updated successfully',
@@ -112,7 +110,7 @@ export async function PATCH(
     return NextResponse.json(
       {
         message: 'Failed to update data',
-        error: error,
+        error,
       },
       { status: HttpStatusCode.InternalServerError }
     );

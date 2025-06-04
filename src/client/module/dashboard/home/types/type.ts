@@ -64,7 +64,7 @@ export interface PjgtData {
     "__EMPTY_12"?: string;
     "__EMPTY_13"?: string;
     "__EMPTY_14"?: string;
-    [key: string]: any; // opsional agar fleksibel
+    [key: string]: string | undefined; // Allow only string or undefined values for dynamic keys
   }
   interface GuruTugas {
     nama_gt: string;

@@ -3,6 +3,7 @@ import { useQueryGetStudent } from '../api/useQueryGetStudent';
 import { useEffect, useState } from 'react';
 import useDebounce from '@/client/hooks/useDebounce';
 import { GuruTugas } from '@prisma/client';
+import { GTPayload } from '../schema/GTSchema';
 
 const useGT = () => {
   const { handleOnChangeLimit, handleOnChangePage, limit, page } =
@@ -21,15 +22,15 @@ const useGT = () => {
     isOpen :false,
     data:null,
   });
-// const [modalEdit, setModalEdit] = useState<{
-//   isOpen: boolean;
-//   id: string | undefined;
-//   data: PJPayload | null;
-// }>({
-//   isOpen: false,
-//   id: undefined,
-//   data: null,
-// });
+const [modalEdit, setModalEdit] = useState<{
+  isOpen: boolean;
+  id: string | undefined;
+  data: GTPayload | null;
+}>({
+  isOpen: false,
+  id: undefined,
+  data: null,
+});
 
   const { data, isLoading ,refetch} = useQueryGetStudent({
     params: {
@@ -41,7 +42,7 @@ const useGT = () => {
 
   useEffect(() => {
     refetch();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm,refetch]);
 
 
   const handleOnChangeSearch = (value: string) => {
@@ -60,6 +61,8 @@ const useGT = () => {
     handleOnChangeSearch,
     isModalDetailOpen,
     setIsModalDetailOpen,
+    modalEdit,
+    setModalEdit,
   };
 };
 

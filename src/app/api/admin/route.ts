@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
 
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
+  const keyword = searchParams.get('keyword') || '';
   const skip = (page - 1) * limit;
 
   try {
@@ -22,6 +23,9 @@ export async function GET(req: NextRequest) {
         },
         where: {
           role: 'admin',
+          name: {
+            contains: keyword,
+          },
         },
         select: {
           id: true,
@@ -36,6 +40,9 @@ export async function GET(req: NextRequest) {
       prisma.user.count({
         where: {
           role: 'admin',
+          name: {
+            contains: keyword,
+          },
         },
       }),
     ]);

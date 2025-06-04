@@ -1,7 +1,5 @@
 import FormModal from '@/client/components/FormModal';
 import Input from '@/client/components/Input';
-
-import { EditAdminPayloadWithId } from '../types/type';
 import useEditAdmin from '../hooks/useEditAdmin';
 import { useMemo } from 'react';
 

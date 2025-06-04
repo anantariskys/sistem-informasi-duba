@@ -27,6 +27,7 @@ export default function PenanggungJawabPage() {
     setIsModalDeleteOpen,
     modalEdit,
     setModalEdit,
+    handleOnChangeSearch,
   } = usePenanggungJawab();
 
   const { handleSubmit, isPendingDeleteCourse, setSelectedCourseId } =
@@ -124,6 +125,7 @@ export default function PenanggungJawabPage() {
         onPageChange={handleOnChangePage}
         loading={isLoading}
         onLimitChange={handleOnChangeLimit}
+        onSearchChange={handleOnChangeSearch}
       />
       <CreateModalPJ
         isShow={isModalCreateOpen}

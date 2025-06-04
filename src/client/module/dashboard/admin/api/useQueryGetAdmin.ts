@@ -8,6 +8,7 @@ import {  User } from '@prisma/client';
 export type GetAdminQueryParams = {
   limit: number;
   page: number;
+  keyword?: string;
 };
 
 const getStudentQuery = async (params: GetAdminQueryParams) => {
@@ -17,6 +18,7 @@ const getStudentQuery = async (params: GetAdminQueryParams) => {
     {
       limit: params.limit,
       page: params.page,
+      keyword: params.keyword,
     }
   );
   return res;
@@ -49,6 +51,7 @@ const useQueryGetAdmin = ({
     getStudentQuery({
       limit: params?.limit ?? 10,
       page: params?.page ?? 1,
+      keyword: params?.keyword,
     });
 
   return useQueryProvider<AdminListResponse>({

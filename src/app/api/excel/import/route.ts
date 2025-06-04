@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
 
   for (const data of body) {
-    const { korwil, penanggungJawab } = data;
+    const {  penanggungJawab } = data;
 
     await prisma.$transaction(async (tx) => {
       for (const item of penanggungJawab) {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         });
 
         for (const gt of item.guru_tugas || []) {
-          const gtData = await tx.guruTugas.create({
+           await tx.guruTugas.create({
             data: {
               nama: gt.nama_gt || '',
               alamat: gt.alamat_gt || '',

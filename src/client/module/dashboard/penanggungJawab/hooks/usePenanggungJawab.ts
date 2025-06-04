@@ -1,31 +1,42 @@
 import usePagination from '@/client/hooks/usePagination';
 import { useQueryGetPenanggungJawab } from '../api/useQueryGetPenanggungJawab';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PJPayload } from '../schema/PJSchema';
+import useDebounce from '@/client/hooks/useDebounce';
 
 const usePenanggungJawab = () => {
   const { handleOnChangeLimit, handleOnChangePage, limit, page } =
     usePagination();
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Delay 500ms
+
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-const [modalEdit, setModalEdit] = useState<{
-  isOpen: boolean;
-  id: string | undefined;
-  data: PJPayload | null;
-}>({
-  isOpen: false,
-  id: undefined,
-  data: null,
-});
+  const [modalEdit, setModalEdit] = useState<{
+    isOpen: boolean;
+    id: string | undefined;
+    data: PJPayload | null;
+  }>({
+    isOpen: false,
+    id: undefined,
+    data: null,
+  });
 
-  const { data, isLoading } = useQueryGetPenanggungJawab({
+  const { data, isLoading, refetch } = useQueryGetPenanggungJawab({
     params: {
       limit,
       page,
+      keyword: debouncedSearchTerm,
     },
   });
 
+  useEffect(() => {
+    refetch();
+  }, [debouncedSearchTerm,refetch]);
+  const handleOnChangeSearch = (value: string) => {
+    setSearchTerm(value);
+  };
   return {
     data: data?.data,
     isLoading,
@@ -38,7 +49,7 @@ const [modalEdit, setModalEdit] = useState<{
     setIsModalDeleteOpen,
     modalEdit,
     setModalEdit,
-   
+    handleOnChangeSearch,
   };
 };
 

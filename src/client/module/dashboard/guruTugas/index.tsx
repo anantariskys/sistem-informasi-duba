@@ -11,6 +11,7 @@ import ConfirmModal from '@/client/components/ConfirmModal';
 import CreateModalGT from './components/CreateModalGT';
 import { useSession } from 'next-auth/react';
 import DetailModalGT from './components/DetailModalGT';
+import EditModalGT from './components/EditModalGT';
 
 export default function StudentPage() {
   const { data: session } = useSession();
@@ -28,6 +29,8 @@ export default function StudentPage() {
     handleOnChangeSearch,
     isModalDetailOpen,
     setIsModalDetailOpen,
+    modalEdit,
+    setModalEdit,
   } = useGT();
 
   const { handleSubmit, isPendingDeleteGT, setSelectedGTId } = useDeleteGT(() =>
@@ -68,7 +71,24 @@ export default function StudentPage() {
             header: 'Action',
             render: (row: GuruTugasDT) => (
               <div className="flex gap-2">
-                <Button size="sm" variant="warning">
+                <Button
+                  onClick={() => {
+                    setModalEdit({
+                      isOpen: true,
+                      data: {
+                        alamat: row.alamat,
+                        jurusan: row.jurusan,
+                        nama: row.nama,
+                        penanggungJawabId: row.penanggungJawab?.id,
+                        nomorHp: row.nomorHp || undefined,
+                        foto: row.foto || undefined,
+                      },
+                      id: row.id.toString(),
+                    });
+                  }}
+                  size="sm"
+                  variant="warning"
+                >
                   Edit
                 </Button>
                 <Button
@@ -137,6 +157,19 @@ export default function StudentPage() {
       <CreateModalGT
         isShow={isModalCreateOpen}
         onClose={() => setIsModalCreateOpen(false)}
+      />
+      <EditModalGT
+        isShow={modalEdit.isOpen}
+        onClose={() => setModalEdit({ isOpen: false, data: null, id: '' })}
+        initialData={{
+          alamat: modalEdit.data?.alamat || '',
+          jurusan: modalEdit.data?.jurusan || '',
+          nama: modalEdit.data?.nama || '',
+          penanggungJawabId: modalEdit.data?.penanggungJawabId || 0,
+          nomorHp: modalEdit.data?.nomorHp || '',
+          foto: modalEdit.data?.foto || '',
+          id: modalEdit.id || '',
+        }}
       />
       <DetailModalGT
         isShow={isModalDetailOpen.isOpen}

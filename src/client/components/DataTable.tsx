@@ -30,7 +30,6 @@ interface DataTableProps<T> {
 }
 
 export function DataTable<T>({
-  title = 'Data table',
   data,
   columns,
   className = '',

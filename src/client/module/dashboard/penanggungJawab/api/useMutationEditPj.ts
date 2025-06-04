@@ -1,7 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { PJPayload } from '../schema/PJSchema';
 import { apiClient, ErrorResponse } from '@/client/lib/axios';
 import { PenanggunJawabGuruTugas } from '@prisma/client';
 import { queryKeys } from '@/client/const/queryKeys';

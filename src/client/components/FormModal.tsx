@@ -26,7 +26,7 @@ const FormModal: React.FC<FormModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <form
         onSubmit={onSubmit}
-        className="bg-white rounded-lg w-full max-w-md p-6 shadow-lg"
+        className="bg-white rounded-lg w-full max-h-[75vh] overflow-y-auto max-w-md p-6 shadow-lg"
       >
         <div className="mb-4">
           <div className="flex items-center justify-between">
@@ -45,7 +45,12 @@ const FormModal: React.FC<FormModalProps> = ({
         <div className="space-y-4">{children}</div>
 
         <div className="mt-6 flex justify-end space-x-2">
-          <Button variant='primaryOutline' type="button" onClick={onClose} disabled={isSubmitting}>
+          <Button
+            variant="primaryOutline"
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
 

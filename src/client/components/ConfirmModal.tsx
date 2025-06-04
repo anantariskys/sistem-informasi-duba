@@ -40,7 +40,7 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
 
   const iconClass = clsx('size-6', {
     'text-red-500': type === 'error',
-    'text-warning-600': type === 'warning',
+    'text-darkPurple': type === 'warning',
   });
 
   const buttonVariant =

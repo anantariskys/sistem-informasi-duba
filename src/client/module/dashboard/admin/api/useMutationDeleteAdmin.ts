@@ -2,7 +2,7 @@ import { UseMutationOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { apiClient, ErrorResponse } from '@/client/lib/axios';
-import { PenanggunJawabGuruTugas, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { queryKeys } from '@/client/const/queryKeys';
 import useMutationProvider from '@/client/hooks/useMutationProvider';
 import { DeleteAdminPayload } from '../types/type';

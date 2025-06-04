@@ -8,6 +8,7 @@ import { PenanggunJawabGuruTugas } from '@prisma/client';
 export type GetPenanggungJawabQueryParams = {
   limit: number;
   page: number;
+  keyword?: string;
 };
 
 const getPenanggungJawabQuery = async (
@@ -19,6 +20,7 @@ const getPenanggungJawabQuery = async (
     {
       limit: params.limit,
       page: params.page,
+      keyword: params.keyword,
     }
   );
   return res;
@@ -51,6 +53,7 @@ const useQueryGetPenanggungJawab = ({
     getPenanggungJawabQuery({
       limit: params?.limit ?? 10,
       page: params?.page ?? 1,
+      keyword: params?.keyword,
     });
 
   return useQueryProvider<PenanggungJawabListResponse>({

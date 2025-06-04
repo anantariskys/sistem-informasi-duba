@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
 
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
+  const keyword = searchParams.get('keyword') || '';
   const skip = (page - 1) * limit;
 
   try {
@@ -31,8 +32,19 @@ export async function GET(req: NextRequest) {
             },
           },
         },
+        where: {
+          nama: {
+            contains: keyword,
+          },
+        },
       }),
-      prisma.penanggunJawabGuruTugas.count(),
+      prisma.penanggunJawabGuruTugas.count({
+        where: {
+          nama: {
+            contains: keyword,
+          },
+        },
+      }),
     ]);
 
     const totalPages = Math.ceil(totalPenanggungJawab / limit);
@@ -64,8 +76,7 @@ export async function GET(req: NextRequest) {
   }
 }
 export async function POST(req: NextRequest) {
-  const { nama,alamat,lembaga } = (await req.json()) as PJPayload;
-
+  const { nama, alamat, lembaga } = (await req.json()) as PJPayload;
 
   if (!nama) {
     return NextResponse.json(

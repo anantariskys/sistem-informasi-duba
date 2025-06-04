@@ -23,6 +23,7 @@ export default function AdminPage() {
     isModalDeleteOpen,
     modalEdit,
     setModalEdit,
+    handleOnChangeSearch
   } = useAdmin();
 
   const { isPendingDeleteAdmin, setSelectedId, handleSubmit } = useDeleteAdmin(
@@ -102,6 +103,7 @@ export default function AdminPage() {
         pagination={pagination}
         onPageChange={handleOnChangePage}
         onLimitChange={handleOnChangeLimit}
+        onSearchChange={handleOnChangeSearch}
       />
       <CreateModalAdmin
         isShow={isModalCreateOpen}

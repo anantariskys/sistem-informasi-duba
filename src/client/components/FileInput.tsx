@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 interface FileInputProps {
@@ -42,10 +43,11 @@ const FileInput: React.FC<FileInputProps> = ({ initialFileUrl, onFileChange }) =
 
       {previewUrl ? (
         <div className="relative w-32 h-32 rounded overflow-hidden border shadow group">
-          <img
+          <Image
             src={previewUrl}
             alt="Preview"
             className="w-full h-full object-cover"
+            unoptimized={true}
           />
           <button
             type="button"

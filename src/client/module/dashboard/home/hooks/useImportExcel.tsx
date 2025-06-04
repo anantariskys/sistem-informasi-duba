@@ -37,7 +37,7 @@ const useImportExcel = () => {
         jurusan: item['__EMPTY_13'] || '',
         no_telepon: item['__EMPTY_14'] || '',
       }));
-      let hasilFormat = formatData(renamedData.slice(5));
+      const hasilFormat = formatData(renamedData.slice(5));
       // Remove last 3 items from penanggungJawab array of the last element
       const lastIndex = hasilFormat.length - 1;
       hasilFormat[lastIndex].penanggungJawab = hasilFormat[

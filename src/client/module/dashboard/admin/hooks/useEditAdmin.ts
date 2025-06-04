@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-import { EditAdminPayloadWithId } from '../types/type';
 import {  EditAdminPayload, EditAdminSchema } from '../schema/adminSchema';
 import useMutationEditAdmin from '../api/useMutationPatchAdmin';
 
@@ -33,7 +32,7 @@ const useEditAdmin = (
         email: initialData.email ?? '',
       });
     }
-  }, [initialData]);
+  }, [initialData,form]);
   const { mutate, isPending, isSuccess } = useMutationEditAdmin();
 
   const onSubmit = useCallback(
@@ -52,13 +51,13 @@ const useEditAdmin = (
             toast.success('Penanggung Jawab berhasil di update');
             onClose(); // ✅ Tutup modal di sini
           },
-          onError: (error: any) => {
+          onError: (error) => {
             toast.error(error?.response?.data?.message ?? 'Terjadi kesalahan');
           },
         }
       );
     },
-    [form, mutate, onClose]
+    [form, mutate, onClose,initialData.id]
   );
 
   return {

@@ -4,12 +4,11 @@ import { NextResponse } from 'next/server';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const id = (await context.params).id;
 
-    // Delete the record from database
     const deletedPenanggungJawab = await prisma.penanggunJawabGuruTugas.delete({
       where: {
         id: Number(id),
@@ -35,16 +34,14 @@ export async function DELETE(
   }
 }
 
-
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const id = (await context.params).id;
     const body = await request.json();
 
-    // Update the record in database
     const updatedPenanggungJawab = await prisma.penanggunJawabGuruTugas.update({
       where: {
         id: Number(id),
@@ -76,4 +73,3 @@ export async function PATCH(
     );
   }
 }
-
